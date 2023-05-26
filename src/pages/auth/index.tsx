@@ -1,6 +1,6 @@
 import Navbar from '@/components/Navbar';
 import React from 'react';
-import Login from './Login';
+import Login from './Register';
 import AuthModal from './AuthModal';
 
 type indexProps = {
