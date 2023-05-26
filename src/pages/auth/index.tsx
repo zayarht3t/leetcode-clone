@@ -2,12 +2,15 @@ import Navbar from '@/components/Navbar';
 import React from 'react';
 import Login from './Register';
 import AuthModal from './AuthModal';
+import {useRecoilValue} from 'recoil'
+import { authModalState } from '@/atoms/authModalAtom'
 
 type indexProps = {
     
 };
 
 const index:React.FC<indexProps> = () => {
+    const authModal = useRecoilValue(authModalState);
     
     return (
         <div className='w-full h-screen relative bg-gradient-to-b from-gray-600 to-black'>
@@ -15,7 +18,8 @@ const index:React.FC<indexProps> = () => {
                 <Navbar/>
                 <div className='flex items-center justify-center h-[calc(100vh-5rem)] '>
                     <img src={'/hero.png'} alt="" />
-                    <AuthModal/>
+                    {authModal.isOpen && <AuthModal/> }
+                    
                 </div>
                 
             </div>

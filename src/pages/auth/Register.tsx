@@ -1,5 +1,8 @@
+import { authModalState } from '@/atoms/authModalAtom';
+import { type } from 'os';
 import React from 'react';
 import {AiOutlineClose} from 'react-icons/ai';
+import { useSetRecoilState } from 'recoil';
 
 type RegisterProps = {
     
@@ -7,6 +10,11 @@ type RegisterProps = {
 
 const Register:React.FC<RegisterProps> = () => {
     
+     const setAuthModal = useSetRecoilState(authModalState);
+
+     const handleClick = () => {
+          setAuthModal((prev)=>({...prev , type: 'login'}));
+     }
     return (
         <>
            <h2 className='mt-2 font-sans font-bold text-2xl'>
@@ -20,14 +28,11 @@ const Register:React.FC<RegisterProps> = () => {
                 <label htmlFor="password">Password</label>
                 <input type="password" placeholder='your password' name='password' value='' className='px-2 py-3 rounded-md border-[1px] border-gray-300 text-sm' />
            </div>
-           <div className='flex justify-end items-center text-blue-500 cursor-pointer hover:underline'>
-                forget password?
-           </div>
            <div className='mt-3 flex items-center text-center'>
                 <button className='px-2 hover:bg-yellow-500 py-3 mt-3 bg-brand-orange text-lg font-semibold rounded-md w-full  text-center '>Register</button>
            </div>
             <p className='mt-4'>Already have an account?
-                <span className='text-blue-500 hover:underline cursor-pointer ml-2'>Register</span>
+                <span className='text-blue-500 hover:underline cursor-pointer ml-2' onClick={handleClick}>Login</span>
             </p>
         </>
     )
