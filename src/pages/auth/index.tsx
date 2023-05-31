@@ -25,7 +25,7 @@ const index:React.FC<indexProps> = () => {
         }
     },[user,router])
 
-    if(pageLoading) return null;
+    
     
     return (
         <div className='w-full h-screen relative bg-gradient-to-b from-gray-600 to-black'>
