@@ -15,7 +15,7 @@ const Topbar:React.FC<TopbarProps> = ({problemPage}) => {
     const [user,error,loading] = useAuthState(auth);
     
     return (
-        <nav className='w-full h-[70px] items-center bg-dark-layer-1 text-dark-fill-3 px-5 py-2'>
+        <nav className='w-full h-[70px] items-center bg-dark-layer-1  text-dark-fill-3 px-5 py-2'>
             <div className='max-w-[1200px] flex items-center justify-between mx-auto '>
                 <Link href={'/'} >
                     <img src={'/logo-full.png'} alt="" />
