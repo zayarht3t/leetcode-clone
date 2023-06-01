@@ -20,7 +20,7 @@ export default function Home() {
 },[user,router])
   return (
     <div className='w-full h-screen bg-dark-layer-2'>
-      <Topbar/>
+      <Topbar problemPage={true}/>
       <h1 className='text-2xl font-medium uppercase text-gray-400 dark:text-gray-200 mt-10 mb-5 text-center'>
         " Quality Over Quantity "
       </h1>

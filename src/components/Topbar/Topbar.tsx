@@ -1,10 +1,11 @@
 import { auth } from '@/firebase/firebase';
 import Link from 'next/link';
-import React from 'react';
+import React, { useState } from 'react';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import Logout from '../Buttons/Logout';
 import {BsChevronLeft,BsChevronRight} from 'react-icons/bs'
 import {BsList} from 'react-icons/bs'
+import Timer from '../Timer/Timer';
 
 type TopbarProps = {
     problemPage?: boolean,
@@ -45,7 +46,11 @@ const Topbar:React.FC<TopbarProps> = ({problemPage}) => {
                         ) :
                         (
                             <>
+                        {
+                            problemPage && <Timer/>
+                        }
                  <div className='cursor-pointer group relative ml-3 flex items-center'>
+                        
                         <img src="/avatar.png" alt="avator" className='w-10 h-10 rounded-full' />
                         <div
 								className='absolute top-10 left-2/4 -translate-x-2/4  mx-auto bg-dark-layer-1 text-brand-orange p-2 rounded shadow-lg 
