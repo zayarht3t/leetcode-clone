@@ -13,7 +13,7 @@ const ProblemDescription:React.FC<ProblemDescriptionProps> = () => {
             <p className='text-white text-md p-2 border-t-gray-100 bg-dark-layer-1 w-fit rounded-t-md'>Description</p>
             <div className='mt-4 p-2  flex flex-col gap-4'>
                 <h2 className='text-white font-bold text-2xl'>1. Two Sum</h2>
-                <div className='flex gap-10 items-center'>
+                <div className='flex gap-10 items-center cursor-pointer'>
                     <div className='py-1.5 px-3 opacity-70 rounded-[21px] bg-olive'>
                         <p className='text-white opacity-100 '>Easy</p>
                     </div>

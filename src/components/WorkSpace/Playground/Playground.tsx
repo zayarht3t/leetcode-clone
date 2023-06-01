@@ -4,6 +4,7 @@ import Split from 'react-split'
 import CodeMirror from '@uiw/react-codemirror'
 import { vscodeDark } from '@uiw/codemirror-theme-vscode';
 import { javascript } from '@codemirror/lang-javascript';
+import EditFooter from './EditFooter';
 type PlaygroundProps = {
     
 };
@@ -11,7 +12,7 @@ type PlaygroundProps = {
 const Playground:React.FC<PlaygroundProps> = () => {
     
     return (
-        <div className=' bg-dark-layer-1 w-full flex flex-col'>
+        <div className=' bg-dark-layer-1 w-full flex flex-col overflow-x-hidden relative'>
             <PreferenceNav/>
         <Split
             className=" h-[calc(100vh-94px)]"
@@ -71,6 +72,7 @@ const Playground:React.FC<PlaygroundProps> = () => {
             </div>
             
         </Split>
+        <EditFooter/>
         </div>
         
     )
