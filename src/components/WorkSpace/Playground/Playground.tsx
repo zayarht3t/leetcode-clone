@@ -10,6 +10,10 @@ type PlaygroundProps = {
 };
 
 const Playground:React.FC<PlaygroundProps> = () => {
+
+    const boilerplate = `function twoSum(nums, target) {
+        //write your code here
+    }`
     
     return (
         <div className=' bg-dark-layer-1 w-full flex flex-col overflow-x-hidden relative'>
@@ -23,7 +27,7 @@ const Playground:React.FC<PlaygroundProps> = () => {
         >
             <div className='w-full overflow-auto'>
                 <CodeMirror
-                    value='const a = 1;'
+                    value={boilerplate}
                     theme={vscodeDark}
                     extensions={[javascript()]}
                     style={{fontSize: 20}}

@@ -7,6 +7,7 @@ type ProblemDescriptionProps = {
 };
 
 const ProblemDescription:React.FC<ProblemDescriptionProps> = () => {
+
     
     return <div className='h-[100vh] bg-dark-layer-1 overflow-y-auto'>
         <div className='bg-dark-layer-2 h-12 rounded-t-md p-2'>
