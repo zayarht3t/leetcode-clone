@@ -36,15 +36,15 @@ const handlerTwoSum = (fn: any)=>{
 export const twoSum: Problem = {
 	id: "two-sum",
 	title: "1. Two Sum",
-	problemStatement: `<p class='mt-3'>
+	problemStatement: `<p class='mt-3 text-white text-lg'>
   Given an array of integers <code>nums</code> and an integer <code>target</code>, return
   <em>indices of the two numbers such that they add up to</em> <code>target</code>.
 </p>
-<p class='mt-3'>
+<p class='mt-3 text-white text-lg'>
   You may assume that each input would have <strong>exactly one solution</strong>, and you
   may not use thesame element twice.
 </p>
-<p class='mt-3'>You can return the answer in any order.</p>`,
+<p class='mt-3 text-white text-lg'>You can return the answer in any order.</p>`,
 	examples: [
 		{
 			id: 1,
@@ -64,14 +64,14 @@ export const twoSum: Problem = {
 			outputText: "[0,1]",
 		},
 	],
-	constraints: `<li class='mt-2'>
+	constraints: `<li class='mt-2 text-white'>
   <code>2 ≤ nums.length ≤ 10</code>
-</li> <li class='mt-2'>
+</li> <li class='mt-2 text-white'>
 <code>-10 ≤ nums[i] ≤ 10</code>
-</li> <li class='mt-2'>
+</li> <li class='mt-2 text-white'>
 <code>-10 ≤ target ≤ 10</code>
 </li>
-<li class='mt-2 text-sm'>
+<li class='mt-2 text-white text-sm'>
 <strong>Only one valid answer exists.</strong>
 </li>`,
 	handlerFunction: handlerTwoSum,

@@ -1,11 +1,14 @@
 import { authModalState } from '@/atoms/authModalAtom';
-import { auth } from '@/firebase/firebase';
+import { auth, firebase } from '@/firebase/firebase';
 import { type } from 'os';
 import React, { useEffect, useState } from 'react';
 import {AiOutlineClose} from 'react-icons/ai';
 import { useSetRecoilState } from 'recoil';
 import { useCreateUserWithEmailAndPassword } from 'react-firebase-hooks/auth';
 import { useRouter } from 'next/router';
+import { toast } from 'react-toastify';
+import { doc, setDoc } from "firebase/firestore"; 
+
 
 type RegisterProps = {
     
@@ -33,18 +36,33 @@ const Register:React.FC<RegisterProps> = () => {
      const handleSubmit =async (e:React.ChangeEvent<HTMLFormElement>) => {
                e.preventDefault();
                try {
-                    if (!inputs.displayName || !inputs.email || !inputs.password) return alert('all the fields are required')
+                    if (!inputs.displayName || !inputs.email || !inputs.password) return toast.error('All fields are required',{position: "top-center",autoClose: 3000});
+                    toast.loading("Creating account...",{position: "top-center",toastId: 'loadingToast'});
                     const newUser = await createUserWithEmailAndPassword(inputs.email, inputs.password)
                     if(!newUser) return;
+                    const userData = {
+                         uid: newUser.user.uid,
+                         email: newUser.user.email,
+                         displayName: inputs.displayName,
+                         createdAt: Date.now(),
+                         updatedAt: Date.now(),
+                         likedProblems: [],
+                         dislikedProblems: [],
+                         staredproblems: [],
+                         solvedProblems: [],
+                    }
+                    await setDoc(doc(firebase, "users", newUser.user.uid), userData);
                     router.push('/');
                } catch (error:any) {
-                    alert(error.message);
+                    toast.error(error.message,{position: "top-center",autoClose: 3000});
+               }finally {
+                    toast.dismiss("loadingToast");
                }
                
           }
 
           useEffect(() => {
-               if (error) alert(error?.message);
+               if (error) toast.error(error?.message,{position: "top-center",autoClose: 3000});
           },[error])
     return (
         <form onSubmit={handleSubmit}>
@@ -53,7 +71,7 @@ const Register:React.FC<RegisterProps> = () => {
            </h2>
            <div className='flex flex-col my-4 gap-3'>
                 <label htmlFor="email">Email</label>
-                <input onChange={handleChange} type="text" placeholder='Email@.com' name='email'  className='px-2 py-3 rounded-md border-[1px] border-gray-300 text-sm' />
+                <input onChange={handleChange} type="text" placeholder='Email@.com' name='email'  className='px-2 py-3 rounded-md border-[1px] border-gray-300 text-black text-sm' />
                 <label htmlFor="email">Display Name</label>
                 <input onChange={handleChange} type="text" placeholder='John Doe' name='displayName'  className='px-2 py-3 bg-gray-500 text-white rounded-md border-[1px] border-gray-300 text-sm' />
                 <label htmlFor="password">Password</label>

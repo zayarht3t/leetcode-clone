@@ -59,7 +59,7 @@ const Login:React.FC<LoginProps> = () => {
            </h2>
            <div className='flex flex-col my-4 gap-3'>
                 <label htmlFor="email">Email</label>
-                <input onChange={handleChange} type="text" placeholder='Email@.com' name='email'  className='px-2 py-3 rounded-md border-[1px] border-gray-300 text-sm' />
+                <input onChange={handleChange} type="text" placeholder='Email@.com' name='email'  className='px-2 py-3 rounded-md border-[1px] border-gray-300 text-sm text-black' />
                 <label htmlFor="password">Password</label>
                 <input onChange={handleChange} type="password" placeholder='your password' name='password' className='px-2 text-black py-3 rounded-md border-[1px] border-gray-300 text-sm' />
            </div>
