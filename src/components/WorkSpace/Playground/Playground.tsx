@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import PreferenceNav from './PreferenceNav/PreferenceNav';
 import Split from 'react-split'
 import CodeMirror from '@uiw/react-codemirror'
@@ -6,33 +6,109 @@ import { vscodeDark } from '@uiw/codemirror-theme-vscode';
 import { javascript } from '@codemirror/lang-javascript';
 import EditFooter from './EditFooter';
 import { Problem } from '../../../../utils/Types/problem';
+import { useAuthState } from 'react-firebase-hooks/auth';
+import { auth, firebase } from '@/firebase/firebase';
+import { toast } from 'react-toastify';
+import { problems } from '../../../../utils/Problems';
+import { useRouter } from 'next/router';
+import { arrayUnion, doc, updateDoc } from 'firebase/firestore';
+import useLocalStorage from '../../../../hooks/useLocalStorage';
 type PlaygroundProps = {
-    problem: Problem
+    problem: Problem,
+    setSuccess: React.Dispatch<React.SetStateAction<boolean>>,
+    setSolved: React.Dispatch<React.SetStateAction<boolean>>
 };
 
-const Playground:React.FC<PlaygroundProps> = ({problem}) => {
+export interface ISettings {
+	fontSize: string;
+	settingsModalIsOpen: boolean;
+	dropdownIsOpen: boolean;
+}
+
+const Playground:React.FC<PlaygroundProps> = ({problem,setSuccess,setSolved}) => {
     const [activeTest, setActiveTest] = React.useState(0);
+    const [user] = useAuthState(auth);
+    let [userCode,setUserCode] = useState<string>(problem.starterCode);
+    const router = useRouter();
+    const [fontSize, setFontSize] = useLocalStorage("lcc-fontSize", "16px");
+    const {pid} = router.query;
+    const [settings, setSettings] = useState<ISettings>({
+		fontSize: fontSize,
+		settingsModalIsOpen: false,
+		dropdownIsOpen: false,
+	});
 
     const boilerplate = `function twoSum(nums, target) {
         //write your code here
     }`
+
+    useEffect(() => {
+        userCode = userCode.slice(userCode.indexOf(problem.starterFunctionName))
+        const code = localStorage.getItem(`code-${pid}`);
+        if(user){
+            setUserCode(code ? JSON.parse(code) : problem.starterCode);
+        }else {
+            setUserCode(problem.starterCode);
+        }
+    }, [pid,userCode,problem,setUserCode,]);
+
+
+	const onChange = (value: string) => {
+		setUserCode(value);
+        localStorage.setItem(`code-${pid}`,JSON.stringify(value));
+	};
+
+    const handlerSuccess = async () => {
+        if(!user){
+             toast.error("You must be logged in to play this problem",{position: "top-center", autoClose: 5000,theme: 'dark'})
+            return;
+    }
+
+    try {
+        const cb = new Function(`return ${userCode}`)();
+        const handler = problems[pid as string].handlerFunction;
+        if(typeof handler === "function"){
+            const success = handler(cb);
+        if(success){
+            toast.success('Congrats! All tests passed',{position: "top-center", autoClose: 5000,theme: 'dark'})
+        }
+        setSuccess(true);
+
+        setTimeout(() =>{
+            setSuccess(false);
+        },6000)
+
+        const userRef = doc(firebase, 'users', user.uid);
+        await updateDoc(userRef,{
+            solvedProblems: arrayUnion(pid)
+        })
+        setSolved(true);
+        }
+        
+    } catch (error) {
+        toast.error("Oops! one or more tests failed",{position: "top-center", autoClose: 5000});
+    }
+        
+
+    }
     
     return (
         <div className=' bg-dark-layer-1 w-full flex flex-col overflow-x-hidden relative'>
-            <PreferenceNav/>
+            <PreferenceNav settings={settings} setSettings={setSettings}/>
         <Split
             className=" h-[calc(100vh-94px)]"
             direction="vertical"
-            sizes={[60,40]}
+            sizes={[55,45]}
             minSize={60}
             
         >
             <div className='w-full overflow-auto'>
                 <CodeMirror
-                    value={problem?.starterCode}
+                    value={userCode}
                     theme={vscodeDark}
+                    onChange={onChange}
                     extensions={[javascript()]}
-                    style={{fontSize: 20}}
+                    style={{fontSize: settings.fontSize}}
                 />
             </div>
             <div className='w-full px-5 overflow-auto'>
@@ -77,7 +153,7 @@ const Playground:React.FC<PlaygroundProps> = ({problem}) => {
             </div>
             
         </Split>
-        <EditFooter/>
+        <EditFooter handlerSuccess={handlerSuccess}/>
         </div>
         
     )

@@ -5,10 +5,11 @@ import {BsCheckCircle} from 'react-icons/bs'
 import {AiFillYoutube} from 'react-icons/ai'
 import {IoClose} from 'react-icons/io5'
 import Youtube from 'react-youtube'
-import { collection, query, where, getDocs, orderBy } from "firebase/firestore";
-import { firebase } from '@/firebase/firebase';
+import { collection, query, where, getDocs, orderBy, doc, getDoc } from "firebase/firestore";
+import { auth, firebase } from '@/firebase/firebase';
 import _ from 'lodash';
 import { DBProblem } from '../../../utils/Types/problem';
+import { useAuthState } from 'react-firebase-hooks/auth';
 
 
 type ProblemTableProps = {
@@ -31,6 +32,7 @@ const ProblemTable:React.FC<ProblemTableProps> = ({setLoadingProblem}) => {
     }
 
     const handleOpenModal = () => setOpenModal(!openModal);
+    const solvedProblems = useGetSolvedProblems();
     return (
         <>
         <tbody className='text-white'>
@@ -40,7 +42,10 @@ const ProblemTable:React.FC<ProblemTableProps> = ({setLoadingProblem}) => {
                     return (
                     <tr className={`${idx % 2 == 1 ? 'bg-dark-layer-1': ''}`} key={problem.id}>
                         <th className='px-2 py-4 font-medium flex-nowrap text-dark-green-s'>
-                            <BsCheckCircle fontSize={'18'} className='w-18'/>
+                            {
+                                solvedProblems.includes(problem.id) && <BsCheckCircle fontSize={'18'} className='w-18'/>
+                            }
+                            
                         </th>
                         <td className='px-6 py-2'>
                             <Link href={`/problems/${problem.id}`} className='hover:text-blue-600 cursor-pointer'>
@@ -108,4 +113,25 @@ export default ProblemTable;
         fetchProblems();
     },[setLoadingProblem])
     return problems;
+}
+
+function useGetSolvedProblems() {
+	const [solvedProblems, setSolvedProblems] = useState<string[]>([]);
+	const [user] = useAuthState(auth);
+
+	useEffect(() => {
+		const getSolvedProblems = async () => {
+			const userRef = doc(firebase, "users", user!.uid);
+			const userDoc = await getDoc(userRef);
+
+			if (userDoc.exists()) {
+				setSolvedProblems(userDoc.data().solvedProblems);
+			}
+		};
+
+		if (user) getSolvedProblems();
+		if (!user) setSolvedProblems([]);
+	}, [user]);
+
+	return solvedProblems;
 }

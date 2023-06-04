@@ -12,15 +12,17 @@ import { useRouter } from 'next/router';
 import { problems } from '../../../../utils/Problems';
 
 type ProblemDescriptionProps = {
-    problem: Problem
+    problem: Problem,
+	_solved: boolean,
 };
 
-const ProblemDescription:React.FC<ProblemDescriptionProps> = ({problem}) => {
+const ProblemDescription:React.FC<ProblemDescriptionProps> = ({problem,_solved}) => {
 
     const {currentProblem,loading,difficultyClass,setCurrentProblem} =  useGetProblems(problem.id)
     const {liked,disliked,setData,solved,starred} = useGetUsersDataOnProblem(problem.id);
     const [user] = useAuthState(auth);
     const [updating,setUpdating] = useState(false);
+	const solvedProblems = useGetSolvedProblems();
 
 
     const returnUserDataAndProblemData = async (transaction: any) => {
@@ -168,7 +170,12 @@ const ProblemDescription:React.FC<ProblemDescriptionProps> = ({problem}) => {
                         <div className={'py-1.5 px-3 opacity-70 rounded-[21px] ' + (difficultyClass)}>
                             <p className=' opacity-100 text-white'>{currentProblem?.difficulty}</p>
                         </div>
-                        <BsCheckCircle size={25} className='text-olive'/>
+						{
+							solved && _solved || solvedProblems.includes(problem.id) && (
+                        		<BsCheckCircle size={25} className='text-olive'/>								
+							)
+						}
+
                         <div className='flex gap-1 items-center' onClick={handleLike}>
                             {
                                 liked && !updating && 
@@ -260,7 +267,7 @@ const ProblemDescription:React.FC<ProblemDescriptionProps> = ({problem}) => {
                 }
 
 
-            <div className='mt-4 p-4 ml-2'>
+            <div className=' pl-4 pr-4 pb-4 ml-2'>
                 <div
                 dangerouslySetInnerHTML={{__html: problem?.constraints}}/>
             </div>
@@ -329,4 +336,25 @@ function useGetUsersDataOnProblem(problemId: string) {
     },[problemId,user])
 
     return {...data,setData}
+}
+
+function useGetSolvedProblems() {
+	const [solvedProblems, setSolvedProblems] = useState<string[]>([]);
+	const [user] = useAuthState(auth);
+
+	useEffect(() => {
+		const getSolvedProblems = async () => {
+			const userRef = doc(firebase, "users", user!.uid);
+			const userDoc = await getDoc(userRef);
+
+			if (userDoc.exists()) {
+				setSolvedProblems(userDoc.data().solvedProblems);
+			}
+		};
+
+		if (user) getSolvedProblems();
+		if (!user) setSolvedProblems([]);
+	}, [user]);
+
+	return solvedProblems;
 }

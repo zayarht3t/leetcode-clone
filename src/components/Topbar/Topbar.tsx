@@ -25,7 +25,6 @@ const Topbar:React.FC<TopbarProps> = ({problemPage}) => {
         const direction = forward ? 1 : -1;
         const order = problem.order + direction;
         const nextProblemKey = Object.keys(problems).find((key)=> problems[key].order === order);
-        console.log(nextProblemKey);
 
         if(forward && !nextProblemKey) {
             const nextProblem = Object.keys(problems).find((key)=> problems[key].order === 1);
@@ -40,7 +39,7 @@ const Topbar:React.FC<TopbarProps> = ({problemPage}) => {
     
     return (
         <nav className='w-full h-[70px] items-center bg-dark-layer-1  text-dark-fill-3 px-5 py-2'>
-            <div className='max-w-[1200px] flex items-center justify-between mx-auto '>
+            <div className=' max-w-full flex items-center justify-between mx-auto '>
                 <Link href={'/'} >
                     <img src={'/logo-full.png'} alt="" />
                 </Link>

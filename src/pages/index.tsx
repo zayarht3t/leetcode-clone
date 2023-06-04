@@ -7,6 +7,7 @@ import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import { doc, setDoc } from 'firebase/firestore'
 import { firebase } from '@/firebase/firebase'
+import useHasMounted from '../../hooks/useHasMounted'
 
 
 const inter = Inter({ subsets: ['latin'] })
@@ -15,6 +16,7 @@ export default function Home() {
   const [user,error,loading] = useAuthState(auth);
   const [problemPage,setProblemPage] = useState(true);
   const router = useRouter();
+  const hasMounted = useHasMounted();
 
   const [input,setInput] = useState({
     id: '',
@@ -49,6 +51,7 @@ export default function Home() {
 //   });
 //   alert("Successfully added problem");
 // }
+if(!hasMounted) return null;
   return (
     <div className='w-full h-screen bg-dark-layer-2'>
       <Topbar problemPage={true}/>
