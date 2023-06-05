@@ -8,11 +8,11 @@ import { useAuthState } from 'react-firebase-hooks/auth';
 import { auth } from '@/firebase/firebase';
 import { useRouter } from 'next/router';
 
-type indexProps = {
+type AuthPageProps = {
     
 };
 
-const index:React.FC<indexProps> = () => {
+const AuthPage:React.FC<AuthPageProps> = () => {
     const authModal = useRecoilValue(authModalState);
     const [user,error,loading] = useAuthState(auth);
     const router = useRouter();
@@ -41,4 +41,4 @@ const index:React.FC<indexProps> = () => {
         </div>
     )
 }
-export default index;
+export default AuthPage;

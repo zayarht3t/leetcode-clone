@@ -69,7 +69,7 @@ const Login:React.FC<LoginProps> = () => {
            <div className='mt-3 flex items-center text-center'>
                 <button type='submit' className='px-2 py-3 hover:bg-yellow-500 mt-3 bg-brand-orange text-lg font-semibold rounded-md w-full  text-center '>{loading ? 'Logging...' : 'Login'}</button>
            </div>
-            <p className='mt-4'>Don't have an account?
+            <p className='mt-4'>Do not have an account?
                 <span className='text-blue-500 hover:underline cursor-pointer ml-2' onClick={handleclick}>Register</span>
             </p>
         </form>

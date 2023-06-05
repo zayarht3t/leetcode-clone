@@ -56,7 +56,7 @@ if(!hasMounted) return null;
     <div className='w-full h-screen bg-dark-layer-2'>
       <Topbar problemPage={true}/>
       <h1 className='text-2xl font-medium uppercase text-gray-400 dark:text-gray-200 mt-10 mb-5 text-center'>
-        " Quality Over Quantity "
+        Quality Over Quantity
       </h1>
       {problemPage && (
 						<div className='max-w-[1200px] mx-auto sm:w-7/12 w-full flex animate-pulse'>

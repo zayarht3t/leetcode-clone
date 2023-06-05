@@ -32,7 +32,7 @@ useEffect(() => {
         return (
         <form onSubmit={sendEmail}>
             <h2 className=' my-4 text-2xl font-bold'>Reset Password</h2>
-            <p>Forgotten your password? Enter your email address below, and we'll send your e-mail allowing you to reset it.</p>
+            <p>Forgotten your password? Enter your email address below, and we will send your e-mail allowing you to reset it.</p>
             <div className='flex flex-col my-4 gap-3'>
    <label htmlFor="email">Email</label>
             <input type="text" onChange={(e)=>setEmail(e.target.value)} placeholder='Email@.com' name='email' value='' className='px-2 py-3 rounded-md border-[1px] border-gray-300 text-sm' />
